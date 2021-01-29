@@ -19,15 +19,16 @@ class Board extends React.Component {
         super(props);
         this.state = {
             squares: Array(9).fill(null),
-            blank: null
+            blank: null,
         };
     }
 
     componentDidMount() {
-        fetch('/solution').then(res => res.json()).then(data => {
+        fetch('/initial').then(res => res.json()).then(data => {
             this.setState({
                 squares: data,
-                blank: data.indexOf(0)
+                blank: data.indexOf(0),
+                solution: null
             });
         });
     }
@@ -36,7 +37,7 @@ class Board extends React.Component {
         const blank = this.state.blank;
         const diff = i - blank;
 
-        if ( [1, 3].includes(Math.abs(diff))) {
+        if ([1, 3].includes(Math.abs(diff))) {
             const squares = this.state.squares.slice();
             squares[i] = 0;
             squares[this.state.blank] = this.state.squares[i]
@@ -47,9 +48,25 @@ class Board extends React.Component {
     }
 
     handleNew() {
-        fetch('/solution').then(res => res.json()).then(data => {
+        fetch('/initial').then(res => res.json()).then(data => {
             this.setState({
                 squares: data,
+                blank: data.indexOf(0),
+                solution: null
+            });
+        });
+    }
+
+    handleSolve() {
+        fetch('/solution', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.squares)
+        }).then(res => res.json()).then(data => {
+            this.setState({
+                solution: data,
                 blank: data.indexOf(0)
             });
         });
@@ -65,10 +82,11 @@ class Board extends React.Component {
     }
 
     render() {
-       
+
         return (
             <div>
                 <button className='tool' onClick={() => this.handleNew()}>New</button>
+                <button className='tool' onClick={() => this.handleSolve()}>Solve</button>
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
@@ -84,7 +102,17 @@ class Board extends React.Component {
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
                 </div>
+                {this.state.solution && (
+                    <div className="game-info">
+                        <div><h3>Action Sequence:</h3></div>
+                        <ol>{this.state.solution.map((action, index) => (
+                            <li key={index}>{action}</li>
+                        ))
+                        }</ol>
+                    </div>
+                )}
             </div>
+
         );
     }
 }
@@ -96,10 +124,7 @@ class Game extends React.Component {
                 <div className="game-board">
                     <Board />
                 </div>
-                <div className="game-info">
-                    <div>{/* status */}</div>
-                    <ol>{/* TODO */}</ol>
-                </div>
+                
             </div>
         );
     }
