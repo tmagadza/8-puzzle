@@ -4,7 +4,6 @@ class EightPuzzle:
 
     def solution(self) :
         """ Returns a list of actions to reach the goal state"""
-        raise NotImplementedError
-
+        raise  NotImplemented
 
 
