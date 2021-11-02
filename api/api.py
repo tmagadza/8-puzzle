@@ -22,7 +22,7 @@ def get_initial_state():
     """
     Generate solution using breath first search
     """
-    return jsonify([i for i in range(9)])
+    return jsonify(random.sample([i for i in range(9)], 9))
 
 @app.route('/solution', methods=['POST'])
 def get_solution():
