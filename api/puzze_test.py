@@ -1,8 +1,4 @@
-from typing import List
-
-from flask import json
 from api import puzzle
-import json
 import random
 
 def test_solution():

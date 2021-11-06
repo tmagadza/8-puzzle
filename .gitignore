@@ -27,3 +27,5 @@ bin/
 .vscode
 .pytest_cache/
 .yarn
+
+package-lock.json
