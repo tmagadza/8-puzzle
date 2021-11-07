@@ -16,7 +16,7 @@ You need to install the following packages on your machine:
 
 In the project directory, you can run:
 
-### `yarn install`
+### `npm install`
 
 Installs all the dependencies of the project.
 
